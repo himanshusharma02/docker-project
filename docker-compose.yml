@@ -1,0 +1,31 @@
+version: '3'
+services:
+  dbos:
+    image: mysql:5.7
+    volumes:
+      - mysql_storage_new:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: sql
+      MYSQL_USER: mail
+      MYSQL_PASSWORD: mail
+      MYSQL_DATABASE: postfixadmin
+  postfixadmin:
+    image: postfixadmin2
+    volumes:
+      - web_new:/var/www/html
+    ports:
+      - 8080:80
+    depends_on:
+      - dbos
+    restart: always
+    environment:
+      POSTFIXADMIN_DB_TYPE: mysqli
+      POSTFIXADMIN_DB_HOST: dbos
+      POSTFIXADMIN_DB_USER: root
+      POSTFIXADMIN_DB_PASSWORD: sql
+      POSTFIXADMIN_DB_NAME: postfixadmin
+
+volumes:
+  mysql_storage_new:
+  web_new:
